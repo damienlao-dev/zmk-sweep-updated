@@ -6,7 +6,7 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 
-// Home row mod macros
+// Home row mod macros (unchanged)
 #define HRML(k2,k3,k4) &ht LALT k2  &ht LCTRL k3  &ht LGUI k4
 #define HRMR(k1,k2,k3) &ht RGUI k1  &ht RCTRL k2  &ht RALT k3
 #define WHRML(k2,k3,k4) &ht LALT k2  &ht LGUI k3  &ht LCTRL k4
@@ -21,7 +21,7 @@
 / {
     behaviors {
 
-        // General hold‑tap for home‑row mods
+        // General home‑row‑mod hold‑tap
         ht: hold_tap {
             label = "hold_tap";
             compatible = "zmk,behavior-hold-tap";
@@ -33,7 +33,7 @@
             bindings = <&kp>, <&kp>;
         };
 
-        // Tap‑holds for QMK‑style LCTL_T, LSFT_T, RALT_T, etc.
+        // LCTL_T, LSFT_T, RSFT_T, RALT_T etc.
         mt_ctl: mt_LCTL {
             label = "LCTL_TAP";
             compatible = "zmk,behavior-hold-tap";
@@ -52,6 +52,15 @@
             bindings = <&kp>, <&kp LSHIFT>;
         };
 
+        mt_rsft: mt_RSFT {
+            label = "RSFT_TAP";
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&kp>, <&kp RSHIFT>;
+        };
+
         mt_ralt: mt_RALT {
             label = "RALT_TAP";
             compatible = "zmk,behavior-hold-tap";
@@ -61,34 +70,11 @@
             bindings = <&kp>, <&kp RALT>;
         };
 
-        // Mouse‑wheel / mouse pointer holds
-        mt_wh_u: mt_WH_U {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            bindings = <&kp>, <&kp WH_U>;
-        };
-        mt_wh_d: mt_WH_D {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            bindings = <&kp>, <&kp WH_D>;
-        };
-        mt_wh_l: mt_WH_L {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            bindings = <&kp>, <&kp WH_L>;
-        };
-        mt_wh_r: mt_WH_R {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            bindings = <&kp>, <&kp WH_R>;
+        // DF layers: DF(0), DF(1), DF(2), DF(3)
+        df: df_layer {
+            compatible = "zmk,behavior-layer";
+            #binding‑cells = <1>;
+            label = "DF_LAYER";
         };
     };
 
@@ -96,97 +82,81 @@
         compatible = "zmk,conditional-layers";
 
         tri_layer {
-            if-layers = <RIG LEF>;
-            then-layer = <TRI>;
+            if‑layers = <RIG LEF>;
+            then‑layer = <TRI>;
         };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
-        // Default typing layer (QMK layer 0)
+        // === Layer 0: Default typing (QMK layer 0) ===
         default_layer {
             bindings = <
                 // Left half – top row
                 &kp Q      &kp W      &kp E      &kp R      &kp T
-                // Left row 2 – home row mods + LCTL
-                &kp A      HRML(S,         D,         F)     &mt_ctl G
+                // Left row 2 – home row + LCTL_T(G)
+                &kp A      &mt_sft S   &mt_sft D   &kp F      &mt_ctl G
                 // Left row 3 – bottom row
                 &kp Z      &kp X      &kp C      &kp V      &kp B
-                // Thumb row – left
-                &lt LEF TAB  &kp SPACE  &trans     &trans     &trans
+                // Left thumb
+                &df 1       &kp SPACE  &trans     &trans     &trans
 
                 // Right half – top row
                 &kp Y      &kp U      &kp I      &kp O      &kp P
-                // Right row 2 – LCTL / LSFT mods + RALT quote
+                // Right row 2 – LCTL_T(J), LSFT_T(K), RALT quote
                 &kp H      &mt_ctl J  &mt_sft K  &kp L      &kp QUOTE
                 // Right row 3 – bottom row
-                &kp N      &kp M      &kp COMMA  &kp DOT    &mt_sft SLASH
-                // Thumb row – right
-                &kp BSPC   &lt RIG TAB  &trans     &trans     &trans
+                &kp N      &kp M      &kp COMMA  &kp DOT    &mt_rsft SLASH
+                // Right thumb
+                &kp BSPC   &df 2       &trans     &trans     &trans
             >;
         };
 
-        // Windows‑style home‑row mod order (QMK layer 0 alt mapping)
-        windows_layer {
-            bindings = <
-                // Same layout, reordered home‑row mods
-                &kp Q      &kp W      &kp E      &kp R      &kp T
-                &kp A      WHRML(S,         D,         F)      &kp G
-                &kp Z      &kp X      &kp C      &kp V      &kp B
-                &lt LEF TAB  &kp SPACE  &trans     &trans     &trans
-
-                &kp Y      &kp U      &kp I      &kp O      &kp P
-                &kp H      WHRMR(J,         K,         L)      &kp QUOTE
-                &kp N      &kp M      &kp COMMA  &kp DOT    &kp SLASH
-                &kp BSPC   &lt RIG TAB  &trans     &trans     &trans
-            >;
-        };
-
-        // Navigation + mouse‑wheel + media (QMK layer 1)
+        // === Layer 1: Navigation / wheel / mouse (QMK layer 1) ===
         right_layer {
             bindings = <
-                // Left side – 7 8 9 + ESC / 0 1 2 3 4 + big keys
+                // Left side – 7 8 9 + ESC / 0 1 2 3 4
                 &kp ESC    &kp N7     &kp N8     &kp N9     &mt_sft N5
-                &kp FSLH   &kp N4     &mt_sft N5  &kp N6     &kp SEMI
+                &kp FSLH   &kp N4     &mt_rsft N5 &kp N6     &kp SEMI
                 &kp N0     &kp N1     &kp N2     &kp N3     &kp DOT
                 &df 0       &kp SPACE  &trans     &trans     &trans
 
-                // Right side – thumb cluster + mouse wheel + buttons + nav
-                &mt_wh_u  &kp BTN1   &kp UARW   &kp BTN2   &kp ENTER
-                &mt_wh_d  &kp LARW   &kp DARW   &kp RARW   &kp DEL
-                &mt_wh_l  &mt_wh_r  &trans     &trans     &kp LALT_ENTER
+                // Right side – thumb cluster + wheel + nav
+                &kp WH_U   &kp BTN1   &kp UARW   &kp BTN2   &kp ENTER
+                &kp WH_D   &kp LARW   &kp DARW   &kp RARW   &kp DEL
+                &kp WH_L   &kp WH_R   &trans     &trans     &kp LALT_ENTER
                 &kp BSPC   &df 2       &trans     &trans     &trans
             >;
         };
 
-        // System / caps / mouse movement (QMK layer 2)
+        // === Layer 2: System / caps / mouse movement (QMK layer 2) ===
         left_layer {
             bindings = <
-                // Left side – LCTL shortcuts + symbols + caps
-                &kp ESC    &mt_ctl W  &trans     &kp GRAVE  &mt_sft GRAVE
-                &mt_ctl A   &trans      &trans     &trans     &kp CAPSLOCK
-                &mt_ctl Z   &mt_ctl X   &mt_ctl C   &mt_ctl V   &kp PSCRN
+                // Left side – RCTL(W), LCTL(A), LCTL(Z) shortcuts, caps
+                &kp ESC    &mt_ctl W   &trans      &kp GRAVE   &mt_sft GRAVE
+                &mt_ctl A   &trans      &trans      &trans      &kp CAPSLOCK
+                &mt_ctl Z   &mt_ctl X   &mt_ctl C   &mt_ctl V   &kp PSCREEN
                 &df 1       &kp SPACE  &trans     &trans     &trans
 
                 // Right side – mouse wheel + pointer + page keys
-                &mt_wh_u  &kp BTN1   &kp MS_U   &kp BTN2   &kp PG_UP
-                &mt_wh_d  &kp MS_L   &kp MS_D   &kp MS_R   &kp ENTER
-                &mt_wh_l  &mt_wh_r  &trans     &trans     &kp LALT
+                &kp WH_U   &kp BTN1   &kp MS_U   &kp BTN2   &kp PG_UP
+                &kp WH_D   &kp MS_L   &kp MS_D   &kp MS_R   &kp ENTER
+                &kp WH_L   &kp WH_R   &trans     &trans     &kp LALT
                 &kp BSPC   &df 2       &trans     &trans     &trans
             >;
         };
 
-        // Audio / brightness / macros (QMK layer 3)
+        // === Layer 3: Audio / brightness / macros (QMK layer 3) ===
         tri_layer {
             bindings = <
-                // Left side – audio + brightness + LCTL / LALT
-                &trans    &mt_ctl EQUAL &kp C_VOL_UP &kp C_BRI_UP  &trans
-                &trans    &mt_ctl MINUS &kp C_VOL_DN &kp C_BRI_DEC &trans
-                &trans    &kp LCTRL    &kp LALT     &kp DEL       &macro M8
-                &df 1       &kp SPACE  &trans     &trans     &trans
+                // Left side – audio + brightness + LCTRL / LALT + DEL + M8
+                &trans    &mt_ctl EQUAL &kp C_VOL_UP  &kp C_BRI_UP  &trans
+                &trans    &mt_ctl MINUS &kp C_VOL_DN  &kp C_BRI_DEC &trans
+                &trans    &kp LCTRL    &kp LALT      &kp DEL       &macro M8
+                &df 1       &kp SPACE  &trans       &trans       &trans
 
-                // Right side – M0–M7, enter, wake, etc.
+                // Right side – M0–M7 + WAKE
                 &trans    &macro M6   &macro M3   &macro M5   &trans
                 &macro M0  &macro M1   &macro M4   &macro M7   &kp WAKE
                 &macro M2  &trans      &trans      &trans      &trans
@@ -194,7 +164,7 @@
             >;
         };
 
-        // Transparent layers 4 and 5 (as in your QMK layout)
+        // === Layer 4 / 5: Transparent (QMK layers 4–5) ===
         transparent_layer_4 {
             bindings = <
                 &trans &trans &trans &trans &trans
@@ -222,10 +192,9 @@
         };
     };
 
-    // Macros (from your QMK `macro` array)
-    // M0–M9 can be fleshed out with `&macro_tap` and `&macro_text` as needed.
+    // === Macros (from your QMK `macro` array) ===
     macros {
-        // Example: M0: HKJC entries (text automation)
+        // M0: HKJC Entries link
         M0: macro_0 {
             compatible = "zmk,behavior-macro";
             labels = "HKJC_ENTRIES";
@@ -233,6 +202,7 @@
             bindings = <&macro_text "https://racing.hkjc.com/racing/information/Chinese/racing/Entries.aspx">, &kp ENTER>;
         };
 
+        // M1: HKJC Racecard link
         M1: macro_1 {
             compatible = "zmk,behavior-macro";
             labels = "HKJC_RACECARD";
@@ -240,6 +210,64 @@
             bindings = <&macro_text "https://racing.hkjc.com/racing/information/Chinese/racing/Racecard.aspx">, &kp ENTER>;
         };
 
-        // Add M2–M8 similar to your QMK macros (SQL, URLs, logins, etc.).
+        // M2: SQL snippet
+        M2: macro_2 {
+            compatible = "zmk,behavior-macro";
+            labels = "SQL_COUNT";
+            #macro‑cells = <0>;
+            bindings = <&macro_text "SELECT COUNT(*) FROM ">;
+        };
+
+        // M3: QCCRMM URL
+        M3: macro_3 {
+            compatible = "zmk,behavior-macro";
+            labels = "QCCRMM_URL";
+            #macro‑cells = <0>;
+            bindings = <&macro_text "https://qccrmm.corpqc.hkjc.com">>;
+        };
+
+        // M4: CRM URL
+        M4: macro_4 {
+            compatible = "zmk,behavior-macro";
+            labels = "CRM_URL";
+            #macro‑cells = <0>;
+            bindings = <&macro_text "https://crm.corpqc.hkjc.com/sat01/main.aspx#">>;
+        };
+
+        // M5: Bragt01 login macro
+        M5: macro_5 {
+            compatible = "zmk,behavior-macro";
+            labels = "BRAGT01_LOGIN";
+            #macro‑cells = <0>;
+            bindings =
+                <&macro_text "Bragt01">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
+        };
+
+        // M6: Brsup01 login macro
+        M6: macro_6 {
+            compatible = "zmk,behavior-macro";
+            labels = "BRSUP01_LOGIN";
+            #macro‑cells = <0>;
+            bindings =
+                <&macro_text "Brsup01">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
+        };
+
+        // M7: testbed_dm\crmtest03 login macro
+        M7: macro_7 {
+            compatible = "zmk,behavior-macro";
+            labels = "CRMTEST_LOGIN";
+            #macro‑cells = <0>;
+            bindings =
+                <&macro_text "testbed_dm\\crmtest03">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
+        };
+
+        // M8: password macro (just typing the password)
+        M8: macro_8 {
+            compatible = "zmk,behavior-macro";
+            labels = "PASSWORD_ROMANTIC";
+            #macro‑cells = <0>;
+            bindings =
+                <&macro_text "R0mAnT1CWArriOr82">, &kp ENTER>;
+        };
     };
 };

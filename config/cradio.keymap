@@ -21,7 +21,7 @@
 / {
     behaviors {
 
-        // General home‑row‑mod hold‑tap
+        // General home-row-mod hold-tap
         ht: hold_tap {
             label = "hold_tap";
             compatible = "zmk,behavior-hold-tap";
@@ -73,7 +73,7 @@
         // DF layers: DF(0), DF(1), DF(2), DF(3)
         df: df_layer {
             compatible = "zmk,behavior-layer";
-            #binding‑cells = <1>;
+            #binding-cells = <1>;
             label = "DF_LAYER";
         };
     };
@@ -82,8 +82,8 @@
         compatible = "zmk,conditional-layers";
 
         tri_layer {
-            if‑layers = <RIG LEF>;
-            then‑layer = <TRI>;
+            if-layers = <RIG LEF>;
+            then-layer = <TRI>;
         };
     };
 
@@ -198,7 +198,7 @@
         M0: macro_0 {
             compatible = "zmk,behavior-macro";
             labels = "HKJC_ENTRIES";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings = <&macro_text "https://racing.hkjc.com/racing/information/Chinese/racing/Entries.aspx">, &kp ENTER>;
         };
 
@@ -206,7 +206,7 @@
         M1: macro_1 {
             compatible = "zmk,behavior-macro";
             labels = "HKJC_RACECARD";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings = <&macro_text "https://racing.hkjc.com/racing/information/Chinese/racing/Racecard.aspx">, &kp ENTER>;
         };
 
@@ -214,7 +214,7 @@
         M2: macro_2 {
             compatible = "zmk,behavior-macro";
             labels = "SQL_COUNT";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings = <&macro_text "SELECT COUNT(*) FROM ">;
         };
 
@@ -222,7 +222,7 @@
         M3: macro_3 {
             compatible = "zmk,behavior-macro";
             labels = "QCCRMM_URL";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings = <&macro_text "https://qccrmm.corpqc.hkjc.com">>;
         };
 
@@ -230,7 +230,7 @@
         M4: macro_4 {
             compatible = "zmk,behavior-macro";
             labels = "CRM_URL";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings = <&macro_text "https://crm.corpqc.hkjc.com/sat01/main.aspx#">>;
         };
 
@@ -238,7 +238,7 @@
         M5: macro_5 {
             compatible = "zmk,behavior-macro";
             labels = "BRAGT01_LOGIN";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings =
                 <&macro_text "Bragt01">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
         };
@@ -247,25 +247,25 @@
         M6: macro_6 {
             compatible = "zmk,behavior-macro";
             labels = "BRSUP01_LOGIN";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings =
                 <&macro_text "Brsup01">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
         };
 
-        // M7: testbed_dm\crmtest03 login macro
+        // M7: testbed_dm\\crmtest03 login macro
         M7: macro_7 {
             compatible = "zmk,behavior-macro";
             labels = "CRMTEST_LOGIN";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings =
-                <&macro_text "testbed_dm\\crmtest03">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
+                <&macro_text "testbed_dm\\\\\\\\crmtest03">, &kp TAB, &macro_text "0000abc!">, &kp ENTER>;
         };
 
         // M8: password macro (just typing the password)
         M8: macro_8 {
             compatible = "zmk,behavior-macro";
             labels = "PASSWORD_ROMANTIC";
-            #macro‑cells = <0>;
+            #macro-cells = <0>;
             bindings =
                 <&macro_text "R0mAnT1CWArriOr82">, &kp ENTER>;
         };
